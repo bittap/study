@@ -12,7 +12,7 @@
 
 # UML図
 
-![UML](/study/src/main/java/com/my/study/object/chapter01/before/uml.PNG)
+![UML](/src/main/java/com/my/study/object/chapter01/before/uml.PNG)
 
 # 問題点
 
