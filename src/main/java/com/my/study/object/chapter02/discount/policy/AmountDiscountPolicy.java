@@ -8,13 +8,13 @@ public class AmountDiscountPolicy extends DiscountPolicy {
 
   private Money discountFee;
 
-  public AmountDiscountPolicy(List<DiscountConditon> conditions, Money fee, Money discountFee) {
-    super(conditions, fee);
+  public AmountDiscountPolicy(List<DiscountConditon> conditions, Money discountFee) {
+    super(conditions);
     this.discountFee = discountFee;
   }
 
   @Override
-  protected Money discountFee() {
+  protected Money discountFee(Money fee) {
     return this.discountFee;
   }
 }

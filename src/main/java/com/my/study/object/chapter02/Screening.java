@@ -13,6 +13,7 @@ public class Screening {
   private Movie movie;
 
   public Reservation reserve(Customer... customers) {
-    return new Reservation(this, Arrays.asList(customers), movie.calculateFee(this));
+    return new Reservation(this, Arrays.asList(customers),
+        movie.calculateFee(this).times(customers.length));
   }
 }

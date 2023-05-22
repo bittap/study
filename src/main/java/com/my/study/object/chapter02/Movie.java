@@ -1,21 +1,29 @@
 package com.my.study.object.chapter02;
 
 import java.time.Duration;
+import java.util.Objects;
 import com.my.study.object.chapter02.discount.policy.DiscountPolicy;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@AllArgsConstructor
 public class Movie {
 
+  @Getter
   private String title;
 
+  @Getter
   private Money fee;
+
+  @Getter
+  private Duration runningTime;
 
   private DiscountPolicy discountPolicy;
 
-  private Duration runningTime;
-
   public Money calculateFee(Screening screening) {
-    // TODO Auto-generated method stub
-    return null;
+    return Objects.nonNull(discountPolicy)
+        ? discountPolicy.calculate(screening.getSchedule(), this.fee)
+        : this.fee;
   }
 
 }

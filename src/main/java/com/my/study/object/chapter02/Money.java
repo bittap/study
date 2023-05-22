@@ -1,30 +1,45 @@
 package com.my.study.object.chapter02;
 
 import java.math.BigDecimal;
-import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
-@AllArgsConstructor
 @Getter
+@EqualsAndHashCode
+@ToString
 public class Money {
 
-  public static Money ZERO = new Money(new BigDecimal(0));
+  public static Money ZERO = new Money(BigDecimal.ZERO);
 
   private BigDecimal amount;
 
+
+  public Money(int amount) {
+    this.amount = BigDecimal.valueOf(amount);
+  }
+
+  public Money(double amount) {
+    this.amount = BigDecimal.valueOf(amount);
+  }
+
+  private Money(BigDecimal amount) {
+    this.amount = amount;
+  }
+
   public Money plus(int amount) {
-    return new Money(this.amount.add(new BigDecimal(amount)));
+    return new Money(this.amount.add(BigDecimal.valueOf(amount)));
   }
 
   public Money minus(int amount) {
-    return new Money(this.amount.subtract(new BigDecimal(amount)));
+    return new Money(this.amount.subtract(BigDecimal.valueOf(amount)));
   }
 
   public Money minus(Money money) {
     return new Money(this.amount.subtract(money.getAmount()));
   }
 
-  public Money times(BigDecimal times) {
-    return new Money(this.amount.multiply(times));
+  public Money times(double times) {
+    return new Money(this.amount.multiply(BigDecimal.valueOf(times)));
   }
 }
