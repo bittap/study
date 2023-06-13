@@ -34,26 +34,16 @@ chapter02の役割中心の設計をデータ中心の設計に変更しまし�
 仮の状況に対し、コードの変更箇所を比較
 
 1. 割引条件(DiscountCondition)が一つ追加された場合
-
-+ 役割中心の設計
-
-1. DiscountConditionインタフェースを継承する今回追加されるクラス(xxxCondition)を追加する変更
-
-+ データ中心の設計
-
-1. DiscountConditionクラスに新たに新し割引条件用のメソッドを追加
-2. ConditionType(Enum)クラスに新しいフィールドを追加
-3. ReservationAgencyで割引条件関連ロジックの修正
-
-
-2. 順番条件(SequenceCondition)クラスのフィールドSequenceのタイプがintからdoubleに変わった場合
-
-+ 役割中心の設計
-
-1. SequenceConditionクラスのSequenceフィールドのタイプとで割引条件関連ロジックの修正
-
-+ データ中心の設計
-
-1. DiscountConditionのSequenceフィールドを修正
-2. ReservationAgencyで割引条件関連ロジックの修正
+   1. 役割中心の設計
+      1. DiscountConditionインタフェースを継承する今回追加されるクラス(xxxCondition)を追加する変更
+   1. データ中心の設計
+      1. DiscountConditionクラスに新たに新し割引条件用のメソッドを追加
+      1. ConditionType(Enum)クラスに新しいフィールドを追加
+      1. ReservationAgencyで割引条件関連ロジックの修正
+1. 順番条件(SequenceCondition)クラスのフィールドSequenceのタイプがintからdoubleに変わった場合
+   1. 役割中心の設計
+      1. SequenceConditionクラスのSequenceフィールドのタイプとで割引条件関連ロジックの修正
+   1. データ中心の設計
+      1. DiscountConditionのSequenceフィールドを修正
+      1. ReservationAgencyで割引条件関連ロジックの修正
 
