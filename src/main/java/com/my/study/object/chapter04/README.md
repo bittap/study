@@ -47,3 +47,7 @@ chapter02の役割中心の設計をデータ中心の設計に変更しまし�
       1. DiscountConditionのSequenceフィールドを修正
       1. ReservationAgencyで割引条件関連ロジックの修正
 
+# 苦労したところ
+
+今回のchapter04はchapter02の内容をデータ中心の設計に変えることでそこまで難しくなかったため、苦労したところはなかったです。
+
