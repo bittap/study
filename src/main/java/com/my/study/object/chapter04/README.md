@@ -16,14 +16,14 @@
 
 # UML 役割中心の設計 VS データ中心の設計
 
-chapter02の役割中心の設計をデータ中心の設計に変更しました。
-※ chapter02の詳細の内容は[こちら](/src/main/java/com/my/study/object/chapter02)を参考
-
 + 役割中心の設計UML
 
 ![役割中心の設計UML](/src/main/java/com/my/study/object/chapter02/uml図.PNG)
 
 + データ中心の設計UML
+
+chapter02の役割中心の設計をデータ中心の設計に変更しました。
+※ chapter02の詳細の内容は[こちら](/src/main/java/com/my/study/object/chapter02)を参考
 
 ![データ中心の設計UML](uml図.PNG)
 
@@ -37,17 +37,17 @@ chapter02の役割中心の設計をデータ中心の設計に変更しまし�
    1. 役割中心の設計
       1. DiscountConditionインタフェースを継承する今回追加されるクラス(xxxCondition)を追加する変更
    1. データ中心の設計
-      1. DiscountConditionクラスに新たに新し割引条件用のメソッドを追加
+      1. DiscountConditionクラスに新たな割引条件用のフィールドを追加
       1. ConditionType(Enum)クラスに新しいフィールドを追加
-      1. ReservationAgencyで割引条件関連ロジックの修正
+      1. ReservationAgencyで割引条件関連ロジックを修正
 1. 順番条件(SequenceCondition)クラスのフィールドSequenceのタイプがintからdoubleに変わった場合
    1. 役割中心の設計
       1. SequenceConditionクラスのSequenceフィールドのタイプとで割引条件関連ロジックの修正
    1. データ中心の設計
       1. DiscountConditionのSequenceフィールドを修正
-      1. ReservationAgencyで割引条件関連ロジックの修正
+      1. ReservationAgencyで割引条件関連ロジックを修正
 
-# 苦労したところ
+# 感想
 
-今回のchapter04はchapter02の内容をデータ中心の設計に変えることでそこまで難しくなかったため、苦労したところはなかったです。
+目次「役割中心の設計 VS データ中心の設計でコード変更が発生した場合」を見て修正が発生する時に役割中心の設計がすごく保守性が高いのが分かりました。もちろん、データ中心の設計より役割中心の設計のほうが難しいですが、保守性が高いため、修正が発生した場合低い工数で対応できると思いました。やはり設計が重要だと改めて感じました。
 
