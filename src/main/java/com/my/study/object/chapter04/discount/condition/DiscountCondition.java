@@ -1,8 +1,8 @@
 package com.my.study.object.chapter04.discount.condition;
 
 import java.time.LocalTime;
-import com.my.study.object.chapter04.Schedule;
-import com.my.study.object.chapter04.Utility;
+import com.my.study.object.chapter05.data.Schedule;
+import com.my.study.object.chapter05.data.Utility;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -21,12 +21,20 @@ public class DiscountCondition {
   @Getter
   private CondtionType conditionType;
 
-  public boolean isSatisfiedBy(Schedule schedule) {
-    if (conditionType == CondtionType.SEQUENCE) {
-      return this.sequence == schedule.getSequence() ? true : false;
+  public boolean isSatisFied(Schedule schedule) {
+    if (this.conditionType == CondtionType.SEQUENCE) {
+      return this.isSatisFiedSequence(schedule);
     } else {
-      return Utility.isEqualOrBefore(startedAt, schedule.getStartedAt())
-          && Utility.isEqualOrAfter(endedAt, schedule.getStartedAt());
+      return this.isSatisFiedPeriod(schedule);
     }
+  }
+
+  private boolean isSatisFiedSequence(Schedule schedule) {
+    return this.getSequence() == schedule.getSequence() ? true : false;
+  }
+
+  private boolean isSatisFiedPeriod(Schedule schedule) {
+    return Utility.isEqualOrBefore(this.getStartedAt(), schedule.getStartedAt())
+        && Utility.isEqualOrAfter(this.getEndedAt(), schedule.getStartedAt());
   }
 }
