@@ -27,20 +27,24 @@
 + 明示的  
 コンストラクタ、Setterメソッド、メソッドのパラメータに依存先の対象を参照すること。
 
-    class Movie{
+```
+     class Movie{
     	public Movie(... DiscountPolicy discountPolicy){
     	    this.discountPolicy = discountPolicy;
     	}
     }
+```
 
 + 暗黙的  
 コンストラクタ、Setterメソッド、メソッドの内部から依存先の対象を参照すること。
 
+```
     class Movie{
     	public Movie(...){
     	    this.discountPolicy = new PercentDiscountPolicy();
     	}
     }
+```
 
 暗黙的な参照の場合は、依存元のクラスの内部から依存先のクラスを参照するため、依存先の変更が発生する時、依存元のクラスの内部の修正が必要。  
 明示的な参照の場合は、依存元のクラスは内部から依存先のクラスを参照しないため、依存先の変更が発生する時、対象のクラスのみ変えればよく修正が不要。
@@ -65,7 +69,7 @@ NEWではなく、ファクトリーデザインパターンを使ったほう�
 そうすると、コード修正せずに例外ケースの実装ができる。  
 
 + 悪い例(例外ケースを作る)
-
+```
     class Movie{
       DiscountPolicy discountPolicy;
       
@@ -86,9 +90,11 @@ NEWではなく、ファクトリーデザインパターンを使ったほう�
         }
       }
     }
+```
     
 + よい例(コンテキストを拡張する)
 
+```
     class Movie{
       DiscountPolicy discountPolicy;
       
@@ -102,4 +108,4 @@ NEWではなく、ファクトリーデザインパターンを使ったほう�
     }
     
     new Moview(new NoneDiscountPolicy(...))
-**※ コードイメージは上記の「2.」を参照**
+```
