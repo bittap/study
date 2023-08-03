@@ -111,11 +111,259 @@ result.times(taxRate)
 
 上記の「携帯プランの料金計算プログラム」を継承を使って変える。
 
+[通常料金プラン(親クラス)]
 
+```
+
+public class Phone {
+	private Money amount;
+	private Duration seconds;
+	private List<Call> calls = new ArrayList<>();
+	private double taxRate;
+	
+	...
+	
+	public Money calculateFee() {
+		Money result = Money.ZERO;
+		
+		for(Call call : calls){
+			result = result.plus(amount.times(call.getDuration().getSeconds() / seconds.getSeconds())));
+		}
+		
+		return result.plus(result.times(taxRate));
+	}
+	
+	public Money getAmount{
+		return this.amount;
+	}
+	
+	public double getTaxRate{
+		return this.taxRate;
+	}
+}
+
+```
+
+[深夜割引料金プラン(子クラス)]
+
+```
+
+public class NightlyDiscountPhone {
+	private static final int LATE_NIGHT_HOUR = 23;
+	private Money amount;
+	private Money NigthlyAmount;
+
+	...
+	
+	public Money calculateFee() {
+		Money result = super.calculateFee();
+		
+		Money nigthlyResult = Money.ZERO;
+		
+		for(Call call : calls){
+			if (call.getFrom().getHour() >= LATE_NIGHT_HOUR) {
+				result = result.plus(super.getAmount().minus(NigthlyAmount).times(call.getDuration().getSeconds() / seconds.getSeconds())));
+			}
+		}
+		
+		return result.minus(nigthlyResult.times(getTaxRate));
+	}
+}
+
+```
+
+継承により、[深夜割引料金プラン]クラスから通常料金プラン計算(Phone#calculateFee)という重複コードはなくなったのですが、[深夜割引料金プラン]クラスの料金計算(#calculateFee)は強く通常料金プラン計算(Phone#calculateFee)のロジックに依存している。  
+
+```
+public Money calculateFee() {
+		Money result = super.calculateFee();
+		...
+```
 
 ## 継承の問題
 
+1. 子クラスのメソッド中でsuperで親クラスのメソッドを参照する場合、強く依存してしまう。
+
+2. 間違って継承すると親クラスのメソッドにより、子クラスの仕様が間違ってしまう。  
+例えば、マップの機能を使うために親クラスMapを継承してStringMapを作ったとする。  
+StringMapはマップのキー:String,値:String型である。  
+マップに要素を追加する時、親クラスのメソッドを使うが親クラスのMapはキーと値にString以外の型も入れられるため、子クラスの仕様(String型だけ扱う)に違反することになる。
+
+
 ## 継承の問題改善
+
+継承を使った通話料金計算プログラムを例で説明する
+
+1. 抽象化に依存する
+
+NightlyDiscountPhoneの問題はPhoneに強く依存していてPhoneが変更されるとNightlyDiscountPhoneも変更される可能性がある。  
+解決方法は親実装クラスに依存するのではなく、親抽象クラスに依存するようにする
+
+2. 違いをメソッドに抽出する
+
+	1. 変更されるところと変更されないところを分離する。  
+変更されるところ(通話(Call)に対し、料金計算)
+
+[通常料金プラン(親クラス)]
+
+```
+result = result.plus(amount.times(call.getDuration().getSeconds() / seconds.getSeconds
+```
+
+[深夜割引料金プラン(子クラス)]
+
+```
+result = result.plus(super.getAmount().minus(NigthlyAmount).times(call.getDuration().getSeconds() / seconds.getSeconds())));
+```
+
+変更されないところ(全通話の料金計算)
+
+```
+public Money calculateFee() {
+		Money result = Money.ZERO;
+		
+		for(Call call : calls){
+			result = result.plus(amount.times(call.getDuration().getSeconds() / seconds.getSeconds())));
+		}
+		
+		return result.plus(result.times(taxRate));
+	}
+```
+
+   2. メソッドに抽出する。
+
+
+```
+
+public class Phone {
+	private Money amount;
+	private Duration seconds;
+	private List<Call> calls = new ArrayList<>();
+	private double taxRate;
+	
+	...
+	
+	public Money calculateFee() {
+		Money result = Money.ZERO;
+		
+		for(Call call : calls){
+			result = result.plus(calculateFee(call));
+		}
+		
+		return result.plus(result.times(taxRate));
+	}
+	
+	public Money calculateFee(Call call) {
+		return amount.times(call.getDuration().getSeconds() / seconds.getSeconds()));
+	}
+	
+	public Money getAmount{
+		return this.amount;
+	}
+	
+	public double getTaxRate{
+		return this.taxRate;
+	}
+}
+
+```
+
+[深夜割引料金プラン](子クラス)
+
+```
+
+public class NightlyDiscountPhone {
+	private static final int LATE_NIGHT_HOUR = 23;
+	private Money amount;
+	private Money NigthlyAmount;
+
+	...
+	
+	public Money calculateFee() {
+		Money result = Money.ZERO;
+		
+		for(Call call : calls){
+			result = result.plus(calculateFee(call));
+		}
+		
+		return result.plus(result.times(taxRate));
+	}
+	
+	public Money calculateFee(Call call) {
+		if (call.getFrom().getHour() >= LATE_NIGHT_HOUR) {
+			result = result.plus(super.getAmount().minus(NigthlyAmount).times(call.getDuration().getSeconds() / seconds.getSeconds())));
+		} else {
+			return amount.times(call.getDuration().getSeconds() / seconds.getSeconds()));
+		}
+		
+	}
+}
+
+```
+
+3. 重複コードを抽象化クラスに移動する
+
+抽象化クラスを作って上記2.で抽象したメソッドとインスタンスをを移動する
+
+```
+
+public abstract abstractPhone {
+	private List<Call> calls = new ArrayList<>();
+	private double taxRate;
+
+	public Money calculateFee() {
+		Money result = Money.ZERO;
+		
+		for(Call call : calls){
+			result = result.plus(calculateFee(call));
+		}
+		
+		return result.plus(result.times(taxRate));
+	}
+	
+	public abstract Money calculateFee(Call call);
+ 
+}
+```
+
+```
+
+public class Phone extend abstractPhone {
+	private Money amount;
+	private Duration seconds;
+	
+	...
+	
+	@Overrride
+	public Money calculateFee(Call call) {
+		return amount.times(call.getDuration().getSeconds() / seconds.getSeconds()));
+	}
+}
+
+```
+
+[深夜割引料金プラン](子クラス)
+
+```
+
+public class NightlyDiscountPhone extend abstractPhone {
+	private static final int LATE_NIGHT_HOUR = 23;
+	private Money amount;
+	private Money NigthlyAmount;
+	
+
+	@Overrride
+	public Money calculateFee(Call call) {
+		if (call.getFrom().getHour() >= LATE_NIGHT_HOUR) {
+			result = result.plus(super.getAmount().minus(NigthlyAmount).times(call.getDuration().getSeconds() / seconds.getSeconds())));
+		} else {
+			return amount.times(call.getDuration().getSeconds() / seconds.getSeconds()));
+		}
+		
+	}
+}
+
+```
 
 ## 感想
 
