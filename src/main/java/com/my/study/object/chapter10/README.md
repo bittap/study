@@ -11,9 +11,7 @@
 
 重複コードがない場合に比べて何倍の努力が必要で重複コードを見つけなかった場合、修正漏れでバグの原因になる。
 
-### 携帯のプランに対し、通話料金計算プログラム
-
-通話料金計算プログラムで重複コードを見る。  
+上記の例を見るために携帯のプランに対し、通話料金計算をするプログラムで重複コードを見る。  
 プランには通常料金と深夜割引料金プランがあるとする。  
 料金の計算はプランの料金によって計算される。  
 その後、税金が加算される。
@@ -148,7 +146,7 @@ public class Phone {
 
 ```
 
-public class NightlyDiscountPhone {
+public class NightlyDiscountPhone extend Phone {
 	private static final int LATE_NIGHT_HOUR = 23;
 	private Money amount;
 	private Money NigthlyAmount;
@@ -184,10 +182,10 @@ public Money calculateFee() {
 
 1. 子クラスのメソッド中でsuperで親クラスのメソッドを参照する場合、強く依存してしまう。
 
-2. 間違って継承すると親クラスのメソッドにより、子クラスの仕様が間違ってしまう。  
+2. 間違って継承すると親クラスのメソッドにより、子クラスの仕様が変わってしまう。  
 例えば、マップの機能を使うために親クラスMapを継承してStringMapを作ったとする。  
 StringMapはマップのキー:String,値:String型である。  
-マップに要素を追加する時、親クラスのメソッドを使うが親クラスのMapはキーと値にString以外の型も入れられるため、子クラスの仕様(String型だけ扱う)に違反することになる。
+マップに要素を追加する時、親クラスのメソッド(Map#put)を使うが親クラスのMapはキーと値にString以外の型も入れられるため、子クラスの仕様(String型だけ扱う)に違反することになる。
 
 
 ## 継承の問題改善
@@ -200,9 +198,9 @@ NightlyDiscountPhoneの問題はPhoneに強く依存していてPhoneが変更�
 解決方法は親実装クラスに依存するのではなく、親抽象クラスに依存するようにする
 
 2. 違いをメソッドに抽出する
-
-	1. 変更されるところと変更されないところを分離する。  
-変更されるところ(通話(Call)に対し、料金計算)
+   
+　　① 変更されるところと変更されないところを分離する。  
+　　　　・ 変更されるところ(通話(Call)に対し、料金計算)
 
 [通常料金プラン(親クラス)]
 
@@ -216,21 +214,21 @@ result = result.plus(amount.times(call.getDuration().getSeconds() / seconds.getS
 result = result.plus(super.getAmount().minus(NigthlyAmount).times(call.getDuration().getSeconds() / seconds.getSeconds())));
 ```
 
-変更されないところ(全通話の料金計算)
-
+　　　　・ 変更されないところ(全通話の料金計算)
+	 
 ```
 public Money calculateFee() {
-		Money result = Money.ZERO;
+	Money result = Money.ZERO;
 		
-		for(Call call : calls){
-			result = result.plus(amount.times(call.getDuration().getSeconds() / seconds.getSeconds())));
-		}
-		
-		return result.plus(result.times(taxRate));
+	for(Call call : calls){
+		result = result.plus(amount.times(call.getDuration().getSeconds() / seconds.getSeconds())));
 	}
+			
+	return result.plus(result.times(taxRate));
+}
 ```
 
-   2. メソッドに抽出する。
+　　② メソッドに抽出する。
 
 
 ```
@@ -268,7 +266,7 @@ public class Phone {
 
 ```
 
-[深夜割引料金プラン](子クラス)
+[深夜割引料金プラン(子クラス)]
 
 ```
 
@@ -370,9 +368,9 @@ public class NightlyDiscountPhone extend abstractPhone {
 ```
 
 これにより一つのクラスが一つの責任を持つようになりました。
-+ 全体料金計算は抽象クラス(abstractPhone)
-+ 基本料金計算は子クラス(Phone)
-+ 深夜料金計算は子クラス(NightlyDiscountPhone)
++ 全体料金計算：抽象クラス(abstractPhone)
++ 基本料金計算：子クラス(Phone)
++ 深夜料金計算：子クラス(NightlyDiscountPhone)
 
 ## 継承のメリットとデメリット
 
@@ -386,3 +384,9 @@ public class NightlyDiscountPhone extend abstractPhone {
 
 
 ## 感想
+
+この章で最後に著者は継承の無理やりな使用はやめるべきだと述べている。  
+継承は簡単に重複コード削除・コード再使用ができる反面、子クラスが親クラスに強く依存するため、間違って継承すると
+逆に保守性を上げるために継承したのですが、保守性が下がってしまう。    
+私も最初継承を学んだ時は継承=オブジェクト指向と考えたのですが、大間違いでした。   
+継承を使うときには副作用を考えた上で使うべきだと思うようになりました。
