@@ -307,7 +307,7 @@ public class NightlyDiscountPhone {
 
 ```
 
-public abstract abstractPhone {
+public abstract AbstractPhone {
 	private List<Call> calls = new ArrayList<>();
 	private double taxRate;
 
@@ -330,7 +330,7 @@ public abstract abstractPhone {
 
 ```
 
-public class Phone extend abstractPhone {
+public class Phone extend AbstractPhone {
 	private Money amount;
 	private Duration seconds;
 	
@@ -348,7 +348,7 @@ public class Phone extend abstractPhone {
 
 ```
 
-public class NightlyDiscountPhone extend abstractPhone {
+public class NightlyDiscountPhone extend AbstractPhone {
 	private static final int LATE_NIGHT_HOUR = 23;
 	private Money amount;
 	private Money NigthlyAmount;
@@ -368,7 +368,7 @@ public class NightlyDiscountPhone extend abstractPhone {
 ```
 
 これにより一つのクラスが一つの責任を持つようになりました。
-+ 全体料金計算：抽象クラス(abstractPhone)
++ 全体料金計算：抽象クラス(AbstractPhone)
 + 基本料金計算：子クラス(Phone)
 + 深夜料金計算：子クラス(NightlyDiscountPhone)
 
