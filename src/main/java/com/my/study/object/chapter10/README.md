@@ -245,13 +245,13 @@ public class Phone {
 		Money result = Money.ZERO;
 		
 		for(Call call : calls){
-			result = result.plus(calculateFee(call));
+			result = result.plus(calculateCallFee(call));
 		}
 		
 		return result.plus(result.times(taxRate));
 	}
 	
-	public Money calculateFee(Call call) {
+	public Money calculateCallFee(Call call) {
 		return amount.times(call.getDuration().getSeconds() / seconds.getSeconds()));
 	}
 	
@@ -281,13 +281,13 @@ public class NightlyDiscountPhone {
 		Money result = Money.ZERO;
 		
 		for(Call call : calls){
-			result = result.plus(calculateFee(call));
+			result = result.plus(calculateCallFee(call));
 		}
 		
 		return result.plus(result.times(taxRate));
 	}
 	
-	public Money calculateFee(Call call) {
+	public Money calculateCallFee(Call call) {
 		if (call.getFrom().getHour() >= LATE_NIGHT_HOUR) {
 			result = result.plus(super.getAmount().minus(NigthlyAmount).times(call.getDuration().getSeconds() / seconds.getSeconds())));
 		} else {
@@ -307,7 +307,7 @@ public class NightlyDiscountPhone {
 
 ```
 
-public abstract abstractPhone {
+public abstract AbstractPhone {
 	private List<Call> calls = new ArrayList<>();
 	private double taxRate;
 
@@ -315,13 +315,13 @@ public abstract abstractPhone {
 		Money result = Money.ZERO;
 		
 		for(Call call : calls){
-			result = result.plus(calculateFee(call));
+			result = result.plus(calculateCallFee(call));
 		}
 		
 		return result.plus(result.times(taxRate));
 	}
 	
-	public abstract Money calculateFee(Call call);
+	public abstract Money calculateCallFee(Call call);
  
 }
 ```
@@ -330,14 +330,14 @@ public abstract abstractPhone {
 
 ```
 
-public class Phone extend abstractPhone {
+public class Phone extend AbstractPhone {
 	private Money amount;
 	private Duration seconds;
 	
 	...
 	
 	@Overrride
-	public Money calculateFee(Call call) {
+	public Money calculateCallFee(Call call) {
 		return amount.times(call.getDuration().getSeconds() / seconds.getSeconds()));
 	}
 }
@@ -348,14 +348,14 @@ public class Phone extend abstractPhone {
 
 ```
 
-public class NightlyDiscountPhone extend abstractPhone {
+public class NightlyDiscountPhone extend AbstractPhone {
 	private static final int LATE_NIGHT_HOUR = 23;
 	private Money amount;
 	private Money NigthlyAmount;
 	
 
 	@Overrride
-	public Money calculateFee(Call call) {
+	public Money calculateCallFee(Call call) {
 		if (call.getFrom().getHour() >= LATE_NIGHT_HOUR) {
 			result = result.plus(super.getAmount().minus(NigthlyAmount).times(call.getDuration().getSeconds() / seconds.getSeconds())));
 		} else {
@@ -368,7 +368,7 @@ public class NightlyDiscountPhone extend abstractPhone {
 ```
 
 これにより一つのクラスが一つの責任を持つようになりました。
-+ 全体料金計算：抽象クラス(abstractPhone)
++ 全体料金計算：抽象クラス(AbstractPhone)
 + 基本料金計算：子クラス(Phone)
 + 深夜料金計算：子クラス(NightlyDiscountPhone)
 
