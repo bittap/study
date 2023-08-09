@@ -245,13 +245,13 @@ public class Phone {
 		Money result = Money.ZERO;
 		
 		for(Call call : calls){
-			result = result.plus(calculateFee(call));
+			result = result.plus(calculateCallFee(call));
 		}
 		
 		return result.plus(result.times(taxRate));
 	}
 	
-	public Money calculateFee(Call call) {
+	public Money calculateCallFee(Call call) {
 		return amount.times(call.getDuration().getSeconds() / seconds.getSeconds()));
 	}
 	
@@ -281,13 +281,13 @@ public class NightlyDiscountPhone {
 		Money result = Money.ZERO;
 		
 		for(Call call : calls){
-			result = result.plus(calculateFee(call));
+			result = result.plus(calculateCallFee(call));
 		}
 		
 		return result.plus(result.times(taxRate));
 	}
 	
-	public Money calculateFee(Call call) {
+	public Money calculateCallFee(Call call) {
 		if (call.getFrom().getHour() >= LATE_NIGHT_HOUR) {
 			result = result.plus(super.getAmount().minus(NigthlyAmount).times(call.getDuration().getSeconds() / seconds.getSeconds())));
 		} else {
@@ -315,13 +315,13 @@ public abstract AbstractPhone {
 		Money result = Money.ZERO;
 		
 		for(Call call : calls){
-			result = result.plus(calculateFee(call));
+			result = result.plus(calculateCallFee(call));
 		}
 		
 		return result.plus(result.times(taxRate));
 	}
 	
-	public abstract Money calculateFee(Call call);
+	public abstract Money calculateCallFee(Call call);
  
 }
 ```
@@ -337,7 +337,7 @@ public class Phone extend AbstractPhone {
 	...
 	
 	@Overrride
-	public Money calculateFee(Call call) {
+	public Money calculateCallFee(Call call) {
 		return amount.times(call.getDuration().getSeconds() / seconds.getSeconds()));
 	}
 }
@@ -355,7 +355,7 @@ public class NightlyDiscountPhone extend AbstractPhone {
 	
 
 	@Overrride
-	public Money calculateFee(Call call) {
+	public Money calculateCallFee(Call call) {
 		if (call.getFrom().getHour() >= LATE_NIGHT_HOUR) {
 			result = result.plus(super.getAmount().minus(NigthlyAmount).times(call.getDuration().getSeconds() / seconds.getSeconds())));
 		} else {
