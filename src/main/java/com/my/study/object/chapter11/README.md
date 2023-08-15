@@ -44,13 +44,25 @@
 
 コンポジションクラスのコード
 
-[料金プラン(抽象化クラス)]
+[料金計算インターフェース]
 
 ```
+public interface RatePolicy {
+	public Money calculateFee();
+}
+```
 
-public abstract AbstractPhone {
+[基本料金計算]
+
+```
+public abstract class BasicRatePolicy {
 	private List<Call> calls = new ArrayList<>();
 	private double taxRate;
+
+	public BasicRatePolicy(List<Call> calls, double taxRate){
+		this.calls = calls;
+		this.taxRate = taxRate;
+	}
 
 	public Money calculateFee() {
 		Money result = Money.ZERO;
@@ -70,7 +82,7 @@ public abstract AbstractPhone {
 
 ```
 
-public class Phone extend AbstractPhone {
+public class Phone extend BasicRatePolicy {
 	private Money amount;
 	private Duration seconds;
 	
@@ -88,7 +100,7 @@ public class Phone extend AbstractPhone {
 
 ```
 
-public class NightlyDiscountPhone extend AbstractPhone {
+public class NightlyDiscountPhone extend BasicRatePolicy {
 	private static final int LATE_NIGHT_HOUR = 23;
 	private Money amount;
 	private Money NigthlyAmount;
@@ -111,17 +123,17 @@ public class NightlyDiscountPhone extend AbstractPhone {
 
 ```
 
-public abstract RatePolicy extend AbstractPhone {
-	private AbstractPhone phone;
+public abstract AdditionalRatePolicy extend BasicRatePolicy {
+	private BasicRatePolicy next;
 	
-	public RatePolicy(AbstractPhone phone){
-		this.phone = phone;
+	public RatePolicy(BasicRatePolicy next){
+		this.next = next;
 	}
 	
 	@Overrride
 	public Money calculateFee(){
-		Money money = super.calculateFee();
-		return money.plus(this.afterCalculateFee(call));
+		Money money = next.calculateFee();
+		return afterCalculateFee(money);
 	}
 	
 	public abstract Money afterCalculateFee(Money money);
@@ -132,44 +144,42 @@ public abstract RatePolicy extend AbstractPhone {
 
 ```
 
-public RateDiscountablePhone RatePolicy extend RatePolicy {
+public class RateDiscountablePhone extend RatePolicy {
 	private AbstractPhone phone;
 	private Percent percent;
 	
-	public RatePolicy(AbstractPhone phone, Percent percent){
+	public RateDiscountablePhone(AbstractPhone phone, Percent percent){
 		this.phone = phone;
 		this.percent = percent;
 	}
 	
 	@Overrride
 	public Money afterCalculateFee(Money money){
-		return money.times(percent);
+		return money.minus(money.times(percent));
 	}
 }
 ```
 
-TODO 
-
-1. 上記コンポジションクラス見直し
-2. RatePolicy#calculateFeeこれだとプラスしかできない、税金の場合どうやってマイナスするんだ？
-
-
-
-
-
 
 ## 変更後の比較
 
-クラスを追加してみる。
+「継承による副作用」の問題点二つがなくなるのが分かる。  
+もし、要件に固定割引ポリシーが追加されたとして比較してみる。
 
-「継承による副作用」の問題点二つがなくなるのが分かる。
+[継承の場合]
+![変更後の比較(継承)](変更後の比較(継承).PNG)
 
+[コンポジションの場合]
+![変更後の比較(コンポジション)](変更後の比較(コンポジション).PNG)
 
-
+コンポジションのほうが要件の対応しやすい 且つ 重複コードが発生しないことが分かる。
 
 
 ## 感想
 
-実は本の中では「継承による副作用」の内容はもっとクラスと割引ポリシーがあって長くて複雑だったのです。  
+1. 実は本の中では「継承による副作用」の内容はもっとクラスと割引ポリシーがあって長くて複雑だったのです。  
 しかし、 それを全部書くと長くなりますし、読みづらくなるかと思って私が必要なところだけ考えて少し変更を加えて書きました。  
 それによりもっと理解しやくなったら、嬉しいです。  
+
+2. プロジェクトで実装されたクラスを見るとほとんど継承よりコンポジションのほうが使われていました。  
+この章を参考してなぜコンポジションが多いか分かるようになってよかったです。
