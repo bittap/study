@@ -166,7 +166,7 @@ public class RateDiscountablePhone extend RatePolicy {
 
 ## 変更後の比較
 
-[継承による副作用の問題点](https://github.com/bittap/study/tree/main/src/main/java/com/my/study/object/chapter11#%E7%B6%99%E6%89%BF%E3%81%AB%E3%82%88%E3%82%8B%E5%89%AF%E4%BD%9C%E7%94%A8)の問題点二つがなくなるのが分かる。  
+[継承による副作用の問題点](https://github.com/bittap/study/tree/main/src/main/java/com/my/study/object/chapter11#%E5%95%8F%E9%A1%8C%E7%82%B9)の問題点二つがなくなるのが分かる。  
 もし、要件に固定割引ポリシーが追加されたとして比較してみる。
 
 [継承の場合]
