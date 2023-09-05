@@ -2,7 +2,7 @@
 
 オブジェクト指向プロジェクトでクラスに対し、多態性(※1)を使うための体表的な方法
 
-※1 多態性とは一つの抽象インターフェースを作成してこのインターフェースに対し、色んな実装クラスを連結する能力を言う。
+※1 多態性とは一つの抽象インターフェースを作成し、そのインターフェースに対して色んな実装クラスを連結する能力を言う。
 
 
 ## 継承の概念
@@ -21,7 +21,7 @@ Parent p = new ChildRun();
 
 オブジェクト指向プログラミングは以下のルールによって実行するメソッドを選択する。
 
-+ メッセージを受信したクラスはまず自分が生成したクラスにメソッドがあるか探索する。あったら、メソッドを実行して探索を終了する。
++ メッセージを受信したクラスはまず自分が生成したクラスにメソッドがあるか探索してあったらメソッドを実行して探索を終了する。
 
 + メソッドを見つけなかったら、親クラスでメソッドの探索を続ける。この過程はメソッドが探索ができるまで続く。
 
@@ -34,6 +34,7 @@ Parent p = new ChildRun();
 ```
 Parent p = new ChildRun();
 p.method(); 
+※ ParentとChildRunは親と子クラス関係でmethod()というメソッドを定義したとする
 ```
 この場合作られたタイプ(Parent)ではなく、メッセージを受信するクラスのタイプ(ChildRun)によりメソッドが実行される。
 
@@ -44,9 +45,15 @@ p.method();
 ```
 Parent p = new ChildRun();
 p.method(); 
-※ Parent.method()とChildRun.method()が存在するとする。
 
-self -> ChildRun.method() -> Parent.method()
+class ChildRun extends Parent {
+	public void method(){
+		this.method();
+	}
+}
+
+探索順次
+self -> ChildRun.method() (もしChildRun.methodがなかったら -> Parent.method())
 ```
 
 ### super参照
@@ -56,15 +63,20 @@ self -> ChildRun.method() -> Parent.method()
 ```
 Parent p = new ChildRun();
 p.method(); 
-※ Parent.method()とChildRun.method()が存在するとする。
+
+class ChildRun extends Parent {
+	public void method(){
+		super.method();
+	}
+}
 
 super -> Parent.method()
 ```
 
 ## 感想
 
-どうやってタイプが親なのに、子クラスのメソッドが実行できるか疑問だったのですがこの章を読んで理解できました。   
-後、selfとsuperについて深く理解できてよかったと思います。
+どうやってタイプが親なのに、子クラスのメソッドが実行できるか疑問だったのですが上記の継承の概念を基にできたことでした。   
+継承について深く理解できるいい機会だったと思います。
 
 
 
