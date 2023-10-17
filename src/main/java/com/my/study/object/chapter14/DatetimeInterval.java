@@ -6,8 +6,6 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AccessLevel;
-import lombok.Setter;
 
 /**
  * 日付別に{@code Call}を分ける
@@ -17,42 +15,28 @@ import lombok.Setter;
  */
 public class DatetimeInterval {
 
-  @Setter(value = AccessLevel.PRIVATE)
-  private LocalDateTime startDateTime;
-
-  @Setter(value = AccessLevel.PRIVATE)
-  private LocalDateTime endDateTime;
-
-  public List<DatetimeInterval> splitBy(Call call) {
-    List<DatetimeInterval> datetimeIntervals = new ArrayList<DatetimeInterval>();
+  public List<Call> splitBy(Call call) {
+    List<Call> calls = new ArrayList<Call>();
     // 日数を計算
     long daysDifference = ChronoUnit.DAYS.between(call.getStartDatetime(), call.getEndDatetime());
     for (int i = 0; i <= daysDifference; i++) {
-      DatetimeInterval datetimeInterval = new DatetimeInterval();
+      Call tmpCall = new Call();
       boolean firstDay = (i == 0) ? true : false;
       boolean lastDay = (i == daysDifference) ? true : false;
-      datetimeInterval.setStartDateTime(call.getStartDatetime(), firstDay);
-      datetimeInterval.setEndDateTime(call.getEndDatetime(), lastDay);
-      datetimeIntervals.add(datetimeInterval);
+      tmpCall.setStartDatetime(getStartDateTime(call.getStartDatetime(), firstDay));
+      tmpCall.setEndDatetime(getEndDateTime(call.getEndDatetime(), lastDay));
+      calls.add(tmpCall);
     }
 
-    return datetimeIntervals;
+    return calls;
   }
 
-  private void setStartDateTime(LocalDateTime startDateTime, boolean firstDay) {
-    if (firstDay) {
-      this.setStartDateTime(startDateTime);
-    } else {
-      this.setStartDateTime(this.getDayOfStart(startDateTime.toLocalDate()));
-    }
+  private LocalDateTime getStartDateTime(LocalDateTime startDateTime, boolean firstDay) {
+    return (firstDay) ? startDateTime : this.getDayOfStart(startDateTime.toLocalDate());
   }
 
-  private void setEndDateTime(LocalDateTime endDateTime, boolean lastDay) {
-    if (lastDay) {
-      this.setEndDateTime(endDateTime);
-    } else {
-      this.setEndDateTime(this.getDayOfEnd(endDateTime.toLocalDate()));
-    }
+  private LocalDateTime getEndDateTime(LocalDateTime endDateTime, boolean lastDay) {
+    return (lastDay) ? endDateTime : this.getDayOfEnd(endDateTime.toLocalDate());
   }
 
   /**
