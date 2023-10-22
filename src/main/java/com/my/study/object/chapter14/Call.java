@@ -1,6 +1,8 @@
 package com.my.study.object.chapter14;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,5 +23,9 @@ public class Call {
    * 終了日時
    */
   private LocalDateTime endDatetime;
+
+  public Duration geDuration() {
+    return Duration.between(startDatetime, endDatetime);
+  }
 
 }
