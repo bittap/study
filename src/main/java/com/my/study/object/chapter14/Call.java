@@ -2,9 +2,9 @@ package com.my.study.object.chapter14;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * 一回に通話した記録を保つ
@@ -13,19 +13,27 @@ import lombok.Setter;
  *
  */
 @Getter
-@Setter
 public class Call {
-  /**
-   * 開始日時
-   */
-  private LocalDateTime startDatetime;
-  /**
-   * 終了日時
-   */
-  private LocalDateTime endDatetime;
+  private DatetimeInterval datetimeInterval;
 
-  public Duration geDuration() {
-    return Duration.between(startDatetime, endDatetime);
+  public Call(LocalDateTime from, LocalDateTime to) {
+    this.datetimeInterval = DatetimeInterval.of(from, to);
+  }
+
+  public List<Call> splitBy() {
+    return this.datetimeInterval.splitByDay();
+  }
+
+  public LocalDateTime getFrom() {
+    return this.datetimeInterval.getFrom();
+  }
+
+  public LocalDateTime getTo() {
+    return this.datetimeInterval.getTo();
+  }
+
+  public Duration getDuration() {
+    return datetimeInterval.getDuration();
   }
 
 }
