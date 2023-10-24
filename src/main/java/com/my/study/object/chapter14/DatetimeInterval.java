@@ -23,7 +23,7 @@ public class DatetimeInterval {
 
   private LocalDateTime to;
 
-  private Spliter spliter;
+  private Spliter spliter = new Spliter();
 
   public static DatetimeInterval of(LocalDateTime from, LocalDateTime to) {
     return new DatetimeInterval(from, to);

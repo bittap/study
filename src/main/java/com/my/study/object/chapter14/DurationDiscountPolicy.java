@@ -1,7 +1,6 @@
 package com.my.study.object.chapter14;
 
 import java.time.Duration;
-import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -23,7 +22,7 @@ public class DurationDiscountPolicy extends BasicRatePolicy {
 
   @Override
   protected long calculateCallFee(Call call) {
-    int callMinutes = (int) call.geDuration().getSeconds() / 60;
+    int callMinutes = (int) call.getDuration().getSeconds() / 60;
     long sumFee = 0L;
     for (int i = 0; i < durations.size(); i++) {
       int minutes = (int) durations.get(i).getSeconds() / 60;

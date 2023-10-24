@@ -16,6 +16,6 @@ public class FixedFeePolicy extends BasicRatePolicy {
 
   @Override
   protected long calculateCallFee(Call call) {
-    return call.geDuration().getSeconds() / seconds.getSeconds() * amount;
+    return call.getDuration().getSeconds() / seconds.getSeconds() * amount;
   }
 }
