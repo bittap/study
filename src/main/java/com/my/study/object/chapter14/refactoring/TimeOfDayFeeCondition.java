@@ -5,6 +5,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class TimeOfDayFeeCondition implements FeeCondition {
 
     private LocalTime from;
@@ -18,8 +21,8 @@ public class TimeOfDayFeeCondition implements FeeCondition {
             LocalTime starTime = getFrom(from, interval);
             LocalTime endTime = getTo(to, interval);
 
-            intervals.add(DatetimeInterval.of(LocalDateTime.of(null, starTime),
-                    LocalDateTime.of(null, endTime)));
+            intervals.add(DatetimeInterval.of(LocalDateTime.of(interval.getFrom().toLocalDate(), starTime),
+                    LocalDateTime.of(interval.getTo().toLocalDate(), endTime)));
         }
 
         return intervals;

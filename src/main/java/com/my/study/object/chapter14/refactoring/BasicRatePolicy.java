@@ -2,9 +2,6 @@ package com.my.study.object.chapter14.refactoring;
 
 import java.util.List;
 
-import com.my.study.object.chapter14.Call;
-import com.my.study.object.chapter14.Phone;
-
 import lombok.AllArgsConstructor;
 
 /**

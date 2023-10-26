@@ -1,7 +1,5 @@
 package com.my.study.object.chapter14.refactoring;
 
-import com.my.study.object.chapter14.Call;
-
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
