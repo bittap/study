@@ -1,7 +1,7 @@
 package com.my.study.object.chapter14;
 
 import java.time.Duration;
-import java.util.List;
+import java.time.LocalDateTime;
 
 /**
  * 期間別料金を計算する
@@ -12,29 +12,38 @@ import java.util.List;
  * @author Carmel
  *
  */
-public class DurationDiscountPolicy extends BasicRatePolicy {
+public class DurationDiscountPolicy extends FixedFeePolicy {
 
-  private List<Duration> durations;
+  private Duration from;
 
-  private int amount;
+  private Duration to;
 
-  private List<Long> fees;
+  /**
+   * @param from
+   * @param to
+   */
+  public DurationDiscountPolicy(Duration from, Duration to, int amount, Duration seconds) {
+    super(amount, seconds);
+    this.from = from;
+    this.to = to;
+  }
 
   @Override
   protected long calculateCallFee(Call call) {
-    int callMinutes = (int) call.getDuration().getSeconds() / 60;
     long sumFee = 0L;
-    for (int i = 0; i < durations.size(); i++) {
-      int minutes = (int) durations.get(i).getSeconds() / 60;
-      if (callMinutes > minutes) {
-        sumFee += (minutes * 60) / amount * fees.get(i);
-        callMinutes -= minutes;
-      } else {
-        sumFee += (callMinutes * 60) / amount * fees.get(i);
-        break;
-      }
+
+    if (call.getDuration().compareTo(to) > 0) {
+      return sumFee;
     }
-    return sumFee;
+
+    if (call.getDuration().compareTo(from) < 0) {
+      return sumFee;
+    }
+
+    LocalDateTime fromLdt = call.getFrom().plus(from);
+    LocalDateTime toLdt = call.getDuration().compareTo(to) > 0 ? call.getFrom().plus(to) : call.getTo();
+
+    return super.calculateCallFee(new Call(fromLdt, toLdt));
   }
 
 }
