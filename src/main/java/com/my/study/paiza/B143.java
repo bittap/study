@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,14 +37,15 @@ public class B143 {
             winners.put(winnerKey, collectedVal);
         }
 
-        int maxPeople = 0;
-        List<Integer> outputs = new ArrayList();
+        AtomicInteger maxPeople = new AtomicInteger();
+        List<Integer> outputs = new ArrayList<>();
         winners.forEach((k, v) -> {
             int nowPeople = v.size();
-            if (nowPeople > maxPeople) {
-                outputs = new ArrayList();
+            if (nowPeople > maxPeople.get()) {
+                maxPeople.set(nowPeople);
+                outputs.clear();
                 outputs.add(k);
-            } else if (nowPeople == maxPeople) {
+            } else if (nowPeople == maxPeople.get()) {
                 outputs.add(k);
             }
         });
