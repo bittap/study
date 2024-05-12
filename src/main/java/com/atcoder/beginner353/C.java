@@ -18,7 +18,7 @@ public class C {
         int mod = 100000000;
         int sum = 0;
 
-        for (int i = 0; i < aArr.length; i++) {
+        for (int i = 0; i < aArr.length - 1; i++) {
             int a1 = aArr[i];
             for (int j = i + 1; j < aArr.length; j++) {
                 int a2 = aArr[j];

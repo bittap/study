@@ -11,29 +11,27 @@ public class B {
         int n = scan.nextInt();
         int k = scan.nextInt();
 
-        int seat = k;
-        int count = 0;
-
         int[] groups = new int[n];
 
         for (int i = 0; i < n; i++) {
             groups[i] = scan.nextInt();
         }
 
-        for (int i = 0; i < groups.length;) {
+        int seat = k;
+        int count = 0;
+
+        for (int i = 0; i < groups.length; i++) {
             int curruntNum = groups[i];
 
-            if (seat - curruntNum >= 0) {
-                seat = seat - curruntNum;
-                i++;
-                if (i == groups.length - 1) {
-                    count++;
-                }
-            } else {
-                count++;
+            if (seat < groups[i]) {
                 seat = k;
+                count++;
             }
+
+            seat -= curruntNum;
         }
+
+        count++;
 
         System.out.println(count);
         scan.close();
