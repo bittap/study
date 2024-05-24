@@ -1,7 +1,5 @@
 package com.atcoder;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class CSameIntegers {
@@ -9,30 +7,40 @@ public class CSameIntegers {
   public static void main(String[] args) {
     Scanner scan = new Scanner(System.in);
 
-    List<Integer> nums = new ArrayList<Integer>();
-    nums.add(scan.nextInt());
-    nums.add(scan.nextInt());
-    nums.add(scan.nextInt());
+    int[] nums = new int[3];
+    for (int i = 0; i < nums.length; i++) {
+      nums[i] = scan.nextInt();
+    }
+
+    int odd = 0;
+    int even = 0;
+    for (int i = 0; i < nums.length; i++) {
+      if (nums[i] % 2 == 0)
+        even++;
+      else
+        odd++;
+    }
 
     int answer = 0;
-    while ((nums.get(0) != nums.get(1)) || (nums.get(1) != nums.get(2))) {
-      nums.sort(Integer::compare);
-      long evenCount = nums.stream().filter((e) -> e % 2 == 0).count();
-
-      if (evenCount == 3) {
-        nums.set(0, nums.get(0) + 2);
-      } else {
-        if (nums.get(1) != nums.get(2)) {
-          nums.set(0, nums.get(0) + 1);
-          nums.set(1, nums.get(1) + 1);
-        } else {
-          nums.set(0, nums.get(0) + 2);
-        }
-      }
-
+    if (odd == 2) {
       answer++;
-
+      for (int i = 0; i < nums.length; i++) {
+        if (nums[i] % 2 != 0)
+          nums[i]++;
+      }
+    } else if (even == 2) {
+      answer++;
+      for (int i = 0; i < nums.length; i++) {
+        if (nums[i] % 2 == 0)
+          nums[i]++;
+      }
     }
+
+    int max = Integer.max(nums[0], Integer.max(nums[1], nums[2]));
+    for (int i = 0; i < nums.length; i++) {
+      answer += (max - nums[i]) / 2;
+    }
+
 
     System.out.println(answer);
     scan.close();
