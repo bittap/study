@@ -1,23 +1,23 @@
 package com.atcoder.beginner355;
 
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 public class A {
 
   public static void main(String[] args) {
     Scanner scan = new Scanner(System.in);
+    Set<Integer> peopel = new HashSet<Integer>(Set.of(1, 2, 3));
 
-    int A = scan.nextInt();
-    int B = scan.nextInt();
+    peopel.remove(scan.nextInt());
+    peopel.remove(scan.nextInt());
 
-    if (A == B) {
-      System.out.println(-1);
+    if (peopel.size() > 1) {
+      System.out.println("-1");
     } else {
-      for (int i = 1; i <= 3; i++) {
-        if (i != A && i != B) {
-          System.out.println(i);
-        }
-
+      for (Integer hannin : peopel) {
+        System.out.println(hannin);
       }
     }
 

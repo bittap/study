@@ -1,6 +1,8 @@
 package com.atcoder.beginner355;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 public class B {
@@ -11,55 +13,37 @@ public class B {
     int N = scan.nextInt();
     int M = scan.nextInt();
 
-    int[] A = new int[N];
-    int[] B = new int[M];
+    List<Integer> A = new ArrayList<Integer>();
+    List<Integer> B = new ArrayList<Integer>();
 
-    for (int i = 0; i < A.length; i++) {
-      A[i] = scan.nextInt();
+    for (int i = 0; i < N; i++) {
+      A.add(scan.nextInt());
     }
 
-    for (int i = 0; i < A.length; i++) {
-      B[i] = scan.nextInt();
+    for (int i = 0; i < M; i++) {
+      B.add(scan.nextInt());
     }
 
+    List<Integer> C = new ArrayList<Integer>(A);
+    C.addAll(B);
 
-    Arrays.sort(A);
-    Arrays.sort(B);
+    Collections.sort(A);
+    Collections.sort(C);
 
+    boolean can = false;
 
-
-    boolean isPreA = A[0] < B[0] ? true : false;
-    int n = 0;
-    int m = 0;
-
-    while (n >= N - 1 && m >= M - 1) {
-
-      int nextA = 0;
-      int nextB = 0;
-
-      if (isPreA) {
-        nextA = A[n + 1];
-        nextB = B[m];
-
-        if (nextA < nextB) {
-          System.out.println("YES");
-          return;
-        } else {
-          isPreA = false;
-        }
-      } else {
-        nextA = A[n];
-        nextB = B[m + 1];
-
-        if (nextA < nextB) {
-          isPreA = true;
-        } else {
-          m++;
-        }
+    for (int i = 0; i < C.size() - 1; i++) {
+      if (A.contains(C.get(i)) && A.contains(C.get(i + 1))) {
+        can = true;
+        break;
       }
     }
 
-    System.out.println("NO");
+    if (can) {
+      System.out.println("Yes");
+    } else {
+      System.out.println("No");
+    }
 
     scan.close();
 
