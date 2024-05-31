@@ -9,78 +9,40 @@ public class C {
 
     int N = scan.nextInt();
     int T = scan.nextInt();
-    int[][] NN = new int[N][N];
 
-    for (int i = 0; i < N; i++) {
-      for (int j = 0; j < N; j++) {
-        NN[i][j] = N * (i) + j + 1;
-      }
-    }
-
-    int atehamaru = 0;
     int answer = -1;
 
-    for (int a = 1; a <= T; a++) {
-      int i = 0;
-      int j = 0;
+    int[] row = new int[N];
+    int[] column = new int[N];
+    int diagonal1 = 0;
+    int diagonal2 = 0;
 
-      int A = scan.nextInt();
+    for (int turn = 1; turn <= T; turn++) {
+      int target = scan.nextInt() - 1;
 
-      for (int k = 0; k < N; k++) {
-        for (int v = 0; v < N; v++) {
-          if (NN[k][v] == A) {
-            i = k;
-            j = v;
-          }
-        }
+      int i = target / N;
+      int j = target % N;
+
+      row[i]++;
+      column[i]++;
+
+      if (i == j) {
+        diagonal1++;
       }
 
-      NN[i][j] = atehamaru;
-
-      boolean rowCan = true;
-
-      for (int k = 0; k < N; k++) {
-        int temp = NN[i][k];
-        if (temp != atehamaru) {
-          rowCan = false;
-        }
+      if (i + j == N - 1) {
+        diagonal2++;
       }
 
-      boolean columnCan = true;
-
-      for (int k = 0; k < N; k++) {
-        int temp = NN[k][j];
-        if (temp != atehamaru) {
-          columnCan = false;
-        }
-      }
-
-      boolean nanameCan1 = true;
-
-      for (int k = 0; k < N; k++) {
-        int temp = NN[k][k];
-        if (temp != atehamaru) {
-          nanameCan1 = false;
-        }
-      }
-
-      boolean nanameCan2 = true;
-
-      for (int k = 0; k < N; k++) {
-        int temp = NN[k][N - 1 - k];
-        if (temp != atehamaru) {
-          nanameCan2 = false;
-        }
-      }
-
-      if (rowCan || columnCan || nanameCan1 || nanameCan2) {
-        answer = a;
+      if (row[i] == N || column[i] == N || diagonal1 == N || diagonal2 == N) {
+        answer = turn;
         break;
       }
 
     }
 
     System.out.println(answer);
+
     scan.close();
   }
 }
